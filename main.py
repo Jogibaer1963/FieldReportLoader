@@ -26,7 +26,7 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s"
 )
 
-INPUT = Path('C:/files/field-report.xlsx')
+INPUT = Path('D:/Developement/90_Projekte/03_Python Projects/FieldReportLoader/field-report.xlsx')
 
 
 def main():
@@ -40,7 +40,7 @@ def main():
             keep_default_na=False  # "NA"/"N/A" etc. bleiben Strings, nicht NaN
         )
 
-        # 3) Header normalisieren (trim, NBSP entfernen, Whitespaces vereinheitlichen)
+        # 3) Header Normalisieren (trim, NBSP entfernen, Whitespaces vereinheitlichen)
         def clean_header(s: str) -> str:
             if s is None: return ""
             s = str(s)
@@ -56,6 +56,7 @@ def main():
 
         for column in df.select_dtypes(include=['datetime64[ns]']).columns:
             df[column] = df[column].astype(str).replace('NaT', '')
+
 
         df['long text failure1'] = (df['long text failure1'].fillna('').astype(str) +
                                     ' ' + df['long text failure2'].fillna('').astype(str) +
@@ -114,8 +115,16 @@ def main():
 
         df = df.drop(columns_to_drop, axis=1)
 
+        df.columns = ['machine', 'country', 'report', 'status', 'engineHours', 'repairDate',
+                      'failureDate', 'dateFirstUse', 'warrantyStart', 'warrantyEnd', 'partNumber', 'partName',
+                      'bgzMaster', 'bgzText', 'dtc_1', 'bgz_2', 'partNimber_2', 'bgz_3', 'ratePerHour', 'LaborTaxFlag',
+                      'repairTime', 'grossLaborParts', 'equipment', 'dtcCode', 'textFooter', 'textFooter1',
+                      'decision', 'systemText', 'harvestCond_1', 'harvestCond_2', 'failureCode', 'failureCode1', 'repairCode',
+                      'repairCode1', 'designated', 'designated1', 'failure', 'remedy',
+                      'reason', 'diag', 'comment', 'repairComment', 'longTextExtra ', 'longTextMan']
 
-        df.to_excel('C:/files/field-report_updated.xlsx', index=False)
+
+        df.to_excel('D:/Developement/90_Projekte/03_Python Projects/FieldReportLoader/field-report_updated.xlsx', index=False)
 
         # updated_df = pd.read_excel('field-report_updated.xlsx')
 
